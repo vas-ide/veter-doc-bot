@@ -9,6 +9,6 @@ func NewService() *Service{
 	return &Service{}
 }
 
-func (s *Service) lstService() []Product {
+func (s *Service) LstService() []Product {
 	return allProducts
 }

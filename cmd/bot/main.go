@@ -5,11 +5,12 @@ import (
 	"log"
 	"os"
 
+
+	"github.com/vas-ide/veter-doc-bot/internal/service/product"
+
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/joho/godotenv"
 )
-
-
 
 
 func main() {
@@ -37,7 +38,8 @@ func main() {
 	if err != nil {
 		log.Panic(err)
 	}
-	
+
+    productService := product.NewService()
 
     for update := range updates {
         if update.Message == nil { // ignore any non-Message updates
@@ -69,6 +71,8 @@ func main() {
             catCommand(bot, update.Message)
         case "other":
             otherCommand(bot, update.Message)
+        case "product":
+            ourProduct(bot, update.Message, productService)
         default:
             deffaultBehavior(bot, update.Message)
         }
@@ -97,6 +101,16 @@ func catCommand(bot *tgbotapi.BotAPI, inputMessage *tgbotapi.Message) {
 
 func otherCommand(bot *tgbotapi.BotAPI, inputMessage *tgbotapi.Message) {
     msg := tgbotapi.NewMessage(inputMessage.Chat.ID, fmt.Sprintf("NOT"))
+    bot.Send(msg)
+}
+
+func ourProduct(bot *tgbotapi.BotAPI, inputMessage *tgbotapi.Message, productService *product.Service) {
+    products := productService.LstService()
+    newStr := "All available products: \n"
+    for _, v := range products {
+        newStr = fmt.Sprintf(newStr + "\n%s", v.Title)
+    }
+    msg := tgbotapi.NewMessage(inputMessage.Chat.ID, fmt.Sprintf("%s", newStr))
     bot.Send(msg)
 }
 
