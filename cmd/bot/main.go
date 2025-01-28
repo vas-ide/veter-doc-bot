@@ -1,123 +1,132 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 
-
+	"github.com/vas-ide/veter-doc-bot/internal/app/commands"
 	"github.com/vas-ide/veter-doc-bot/internal/service/product"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/joho/godotenv"
 )
 
-
 func main() {
 
-    godotenv.Load()
+	godotenv.Load()
 
-
-    bot, err := tgbotapi.NewBotAPI(os.Getenv("TELEGRAM_APITOKEN"))
-    if err != nil {
-        log.Panic(err)
-    }
-
-    bot.Debug = true
-
-    log.Printf("Authorized on account %s", bot.Self.UserName)
-
-
-	u :=tgbotapi.UpdateConfig{
-		Timeout: 60,
-	}
-	
-    
-
-    updates := bot.GetUpdatesChan(u)
+	bot, err := tgbotapi.NewBotAPI(os.Getenv("TELEGRAM_APITOKEN"))
 	if err != nil {
 		log.Panic(err)
 	}
 
-    productService := product.NewService()
+	bot.Debug = true
 
-    for update := range updates {
-        if update.Message == nil { // ignore any non-Message updates
-            continue
-        }
+	log.Printf("Authorized on account %s", bot.Self.UserName)
 
-        if !update.Message.IsCommand() { // ignore any non-command Messages
-            msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Info - " + update.Message.Text)
-            if _, err := bot.Send(msg); err != nil {
-                log.Panic(err)
-            }
-            continue
-        }
+	u := tgbotapi.UpdateConfig{
+		Timeout: 60,
+	}
 
+	updates := bot.GetUpdatesChan(u)
+	if err != nil {
+		log.Panic(err)
+	}
 
-        // Create a new MessageConfig. We don't have text yet,
-        // so we leave it empty.
-        // msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Info - ")
-        // msg.ReplyToMessageID = update.Message.MessageID
-        // bot.Send(msg)
+	productService := product.NewService()
+    commander := commands.NewCommander(bot,productService)
 
-        // Extract the command from the Message.
-        switch update.Message.Command() {
-        case "help":
-            helpCommand(bot, update.Message)
-        case "dog":
-            dogCommand(bot, update.Message)
-        case "cat":
-            catCommand(bot, update.Message)
-        case "other":
-            otherCommand(bot, update.Message)
-        case "product":
-            ourProduct(bot, update.Message, productService)
-        default:
-            deffaultBehavior(bot, update.Message)
-        }
-   
+	for update := range updates {
+		if update.Message == nil { // ignore any non-Message updates
+			continue
+		}
 
-        // if _, err := bot.Send(msg); err != nil {
-        //     log.Panic(err)
-        // }
-    }
+		if !update.Message.IsCommand() { // ignore any non-command Messages
+			msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Info - "+update.Message.Text)
+			if _, err := bot.Send(msg); err != nil {
+				log.Panic(err)
+			}
+			continue
+		}
+
+		switch update.Message.Command() {
+		case "help":
+			commander.Help(update.Message)
+		case "dog":
+			commander.Dog(update.Message)
+		case "cat":
+			commander.Cat(update.Message)
+		case "other":
+			commander.Other(update.Message)
+		case "product":
+			commander.Products(update.Message)
+        case "pavel":
+			commander.Pavel(update.Message)
+		default:
+			commander.Deffault(update.Message)
+		}
+
+	}
 }
 
-func helpCommand(bot *tgbotapi.BotAPI, inputMessage *tgbotapi.Message) {
-    msg := tgbotapi.NewMessage(inputMessage.Chat.ID, fmt.Sprintf("What's you pet? \n/dog \n/cat \n/other"))
-    bot.Send(msg)
-}
+// type Commander struct {
+// 	bot *tgbotapi.BotAPI
+//     productService *product.Service
+// }
 
-func dogCommand(bot *tgbotapi.BotAPI, inputMessage *tgbotapi.Message) {
-    msg := tgbotapi.NewMessage(inputMessage.Chat.ID, fmt.Sprintf("DOGI"))
-    bot.Send(msg)
-}
+// func NewCommander(bot *tgbotapi.BotAPI, productService *product.Service) *Commander {
+// 	return &Commander{
+// 		bot: bot,
+//         productService: productService,
+// 	}
+// }
 
-func catCommand(bot *tgbotapi.BotAPI, inputMessage *tgbotapi.Message) {
-    msg := tgbotapi.NewMessage(inputMessage.Chat.ID, fmt.Sprintf("CATI"))
-    bot.Send(msg)
-}
+// func (c Commander) Help (inputMessage *tgbotapi.Message) {
+// 	msg := tgbotapi.NewMessage(inputMessage.Chat.ID, fmt.Sprintf("What's you pet? \n/dog \n/cat \n/other"))
+// 	c.bot.Send(msg)
+// }
 
-func otherCommand(bot *tgbotapi.BotAPI, inputMessage *tgbotapi.Message) {
-    msg := tgbotapi.NewMessage(inputMessage.Chat.ID, fmt.Sprintf("NOT"))
-    bot.Send(msg)
-}
+// func (c Commander) Dog (inputMessage *tgbotapi.Message) {
+// 	msg := tgbotapi.NewMessage(inputMessage.Chat.ID, fmt.Sprintf("DOGI"))
+// 	c.bot.Send(msg)
+// }
 
-func ourProduct(bot *tgbotapi.BotAPI, inputMessage *tgbotapi.Message, productService *product.Service) {
-    products := productService.LstService()
-    newStr := "All available products: \n"
-    for _, v := range products {
-        newStr = fmt.Sprintf(newStr + "\n%s", v.Title)
-    }
-    msg := tgbotapi.NewMessage(inputMessage.Chat.ID, fmt.Sprintf("%s", newStr))
-    bot.Send(msg)
-}
+// func (c Commander) Cat (inputMessage *tgbotapi.Message) {
+// 	msg := tgbotapi.NewMessage(inputMessage.Chat.ID, fmt.Sprintf("CATI"))
+// 	c.bot.Send(msg)
+// }
 
-func deffaultBehavior(bot *tgbotapi.BotAPI, inputMessage *tgbotapi.Message) {
-    msg := tgbotapi.NewMessage(inputMessage.Chat.ID, fmt.Sprintf("We don't know that command. Pls give mo actual information for our assistance."))
-    bot.Send(msg)
-}
+// func (c Commander) Other (inputMessage *tgbotapi.Message) {
+// 	msg := tgbotapi.NewMessage(inputMessage.Chat.ID, fmt.Sprintf("NOT"))
+// 	c.bot.Send(msg)
+// }
 
+// func (c Commander) Products (inputMessage *tgbotapi.Message) {
+// 	products := c.productService.LstService()
+// 	newStr := "All available products: \n"
+// 	for _, v := range products {
+// 		newStr = fmt.Sprintf(newStr+"\n%s", v.Title)
+// 	}
+// 	msg := tgbotapi.NewMessage(inputMessage.Chat.ID, fmt.Sprintf("%s", newStr))
+// 	c.bot.Send(msg)
+// }
 
+// func (c Commander) Pavel (inputMessage *tgbotapi.Message) {
+//     config := qrterminal.Config{
+// 		Level:     qrterminal.M,
+// 		Writer:    os.Stdout,
+// 		BlackChar: qrterminal.WHITE,
+// 		WhiteChar: qrterminal.BLACK,
+// 		QuietZone: 1,
+// 	}
+// 	// qrterminal.GenerateWithConfig("8-918-453-01-57 Kseniy best Veterinar in Eysk.", config)
+// 	qrterminal.GenerateWithConfig("Pavel viebal TRUMP & MELANIA continue - 'https://gkovd.ru/branches/south-air-navigation/'.", config)
+// 	msg := tgbotapi.NewMessage(inputMessage.Chat.ID, fmt.Sprintf("Terminal"))
+// 	c.bot.Send(msg)
+    
+// }
 
+// func (c Commander) Deffault (inputMessage *tgbotapi.Message) {
+// 	msg := tgbotapi.NewMessage(inputMessage.Chat.ID, fmt.Sprintf("We don't know that command. Pls give mo actual information for our assistance."))
+// 	c.bot.Send(msg)
+// }
