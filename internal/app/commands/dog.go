@@ -13,3 +13,9 @@ func (c Commander) Dog (inputMessage *tgbotapi.Message) {
 	msg := tgbotapi.NewMessage(inputMessage.Chat.ID, fmt.Sprintf("DOGI"))
 	c.bot.Send(msg)
 }
+
+
+func init() {
+	registeredCommands["dog"] = (*Commander).Dog 
+}
+

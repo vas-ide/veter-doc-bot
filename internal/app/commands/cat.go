@@ -12,3 +12,9 @@ func (c Commander) Cat (inputMessage *tgbotapi.Message) {
 	msg := tgbotapi.NewMessage(inputMessage.Chat.ID, fmt.Sprintf("CATI"))
 	c.bot.Send(msg)
 }
+
+
+
+func init() {
+	registeredCommands["cat"] = (*Commander).Cat 
+}

@@ -19,3 +19,8 @@ func (c Commander) Products (inputMessage *tgbotapi.Message) {
 	msg := tgbotapi.NewMessage(inputMessage.Chat.ID, fmt.Sprintf("%s", newStr))
 	c.bot.Send(msg)
 }
+
+
+func init() {
+	registeredCommands["product"] = (*Commander).Products
+}

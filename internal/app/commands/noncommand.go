@@ -14,3 +14,8 @@ func (c Commander) Non (inputMessage *tgbotapi.Message) {
 	msg := tgbotapi.NewMessage(inputMessage.Chat.ID, fmt.Sprintf("'%v' --- Message", inputMessage.Text))
 	c.bot.Send(msg)
 }
+
+
+func init() {
+	registeredCommands["non"] = (*Commander).Non
+}

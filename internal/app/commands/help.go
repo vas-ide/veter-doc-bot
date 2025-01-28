@@ -14,3 +14,11 @@ func (c Commander) Help (inputMessage *tgbotapi.Message) {
 	msg := tgbotapi.NewMessage(inputMessage.Chat.ID, fmt.Sprintf("What's you pet? \n/dog \n/cat \n/other"))
 	c.bot.Send(msg)
 }
+
+
+
+func init() {
+	registeredCommands["help"] = (*Commander).Help 
+}
+
+

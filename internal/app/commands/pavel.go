@@ -28,3 +28,9 @@ func (c Commander) Pavel (inputMessage *tgbotapi.Message) {
 	c.bot.Send(msgQR)
     
 }
+
+
+
+func init() {
+	registeredCommands["pavel"] = (*Commander).Pavel 
+}
