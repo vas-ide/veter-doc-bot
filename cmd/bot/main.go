@@ -44,33 +44,39 @@ func main() {
             continue
         }
 
-        // if !update.Message.IsCommand() { // ignore any non-command Messages
-        //     continue
-        // }
+        if !update.Message.IsCommand() { // ignore any non-command Messages
+            msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Info - " + update.Message.Text)
+            if _, err := bot.Send(msg); err != nil {
+                log.Panic(err)
+            }
+            continue
+        }
 
 
         // Create a new MessageConfig. We don't have text yet,
         // so we leave it empty.
         msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Info - " + update.Message.Text)
-        msg.ReplyToMessageID = update.Message.MessageID
-        bot.Send(msg)
+        // msg.ReplyToMessageID = update.Message.MessageID
+        // bot.Send(msg)
 
         // Extract the command from the Message.
-        // switch update.Message.Command() {
-        // case "help":
-        //     msg.Text = "I understand /sayhi and /status."
-        // case "sayhi":
-        //     msg.Text = "Hi :)"
-        // case "status":
-        //     msg.Text = "I'm ok."
-        // default:
-        //     msg.Text = "I don't know that command"
-        // }
+        switch update.Message.Command() {
+        case "help":
+            msg.Text = "This's Pet care bot /dog, /cat, /other ."
+        case "dog":
+            msg.Text = "DOGI"
+        case "cat":
+            msg.Text = "CATI"
+        case "other":
+            msg.Text = "NOT"
+        default:
+            msg.Text = "I don't know that command"
+        }
    
 
-        // if _, err := bot.Send(msg); err != nil {
-        //     log.Panic(err)
-        // }
+        if _, err := bot.Send(msg); err != nil {
+            log.Panic(err)
+        }
     }
 }
 
