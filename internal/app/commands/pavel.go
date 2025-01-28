@@ -24,5 +24,7 @@ func (c Commander) Pavel (inputMessage *tgbotapi.Message) {
 	qrterminal.GenerateWithConfig("Pavel viebal TRUMP & MELANIA continue - 'https://gkovd.ru/branches/south-air-navigation/'.", config)
 	msg := tgbotapi.NewMessage(inputMessage.Chat.ID, fmt.Sprintf("Terminal"))
 	c.bot.Send(msg)
+	msgQR := tgbotapi.NewMessage(inputMessage.Chat.ID, fmt.Sprintf("QR"))
+	c.bot.Send(msgQR)
     
 }
