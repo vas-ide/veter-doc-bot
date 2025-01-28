@@ -7,11 +7,15 @@ import (
     tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
+
+
+const token = "TOKEN"
+
 func main() {
 	// log.Println("VeterDocBot")
 
     // bot, err := tgbotapi.NewBotAPI(os.Getenv("TELEGRAM_APITOKEN"))
-    bot, err := tgbotapi.NewBotAPI("7959641797:AAH-eqWtvFmQqvuMzDQ897djF3BpIJFMVws")
+    bot, err := tgbotapi.NewBotAPI(token)
     if err != nil {
         log.Panic(err)
     }
@@ -25,6 +29,7 @@ func main() {
 		Timeout: 60,
 	}
 	
+    
 
     updates := bot.GetUpdatesChan(u)
 	if err != nil {
