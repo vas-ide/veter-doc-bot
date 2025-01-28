@@ -55,31 +55,55 @@ func main() {
 
         // Create a new MessageConfig. We don't have text yet,
         // so we leave it empty.
-        msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Info - " + update.Message.Text)
+        // msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Info - ")
         // msg.ReplyToMessageID = update.Message.MessageID
         // bot.Send(msg)
 
         // Extract the command from the Message.
         switch update.Message.Command() {
         case "help":
-            msg.Text = "This's Pet care bot /dog, /cat, /other ."
+            helpCommand(bot, update.Message)
         case "dog":
-            msg.Text = "DOGI"
+            dogCommand(bot, update.Message)
         case "cat":
-            msg.Text = "CATI"
+            catCommand(bot, update.Message)
         case "other":
-            msg.Text = "NOT"
+            otherCommand(bot, update.Message)
         default:
-            msg.Text = "I don't know that command"
+            deffaultBehavior(bot, update.Message)
         }
    
 
-        if _, err := bot.Send(msg); err != nil {
-            log.Panic(err)
-        }
+        // if _, err := bot.Send(msg); err != nil {
+        //     log.Panic(err)
+        // }
     }
 }
 
+func helpCommand(bot *tgbotapi.BotAPI, inputMessage *tgbotapi.Message) {
+    msg := tgbotapi.NewMessage(inputMessage.Chat.ID, "What's you pet? /dog /cat /other")
+    bot.Send(msg)
+}
+
+func dogCommand(bot *tgbotapi.BotAPI, inputMessage *tgbotapi.Message) {
+    msg := tgbotapi.NewMessage(inputMessage.Chat.ID, "DOGI")
+    bot.Send(msg)
+}
+
+func catCommand(bot *tgbotapi.BotAPI, inputMessage *tgbotapi.Message) {
+    msg := tgbotapi.NewMessage(inputMessage.Chat.ID, "CATI")
+    bot.Send(msg)
+}
+
+func otherCommand(bot *tgbotapi.BotAPI, inputMessage *tgbotapi.Message) {
+    msg := tgbotapi.NewMessage(inputMessage.Chat.ID, "NOT")
+    bot.Send(msg)
+}
+
+func deffaultBehavior(bot *tgbotapi.BotAPI, inputMessage *tgbotapi.Message) {
+    msg := tgbotapi.NewMessage(inputMessage.Chat.ID, "We don't know that command. Pls give mo actual information for our assistance.")
+    bot.Send(msg)
+}
 
 
 
