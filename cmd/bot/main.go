@@ -1,12 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 
-
-    "github.com/joho/godotenv"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"github.com/joho/godotenv"
 )
 
 
@@ -81,27 +81,27 @@ func main() {
 }
 
 func helpCommand(bot *tgbotapi.BotAPI, inputMessage *tgbotapi.Message) {
-    msg := tgbotapi.NewMessage(inputMessage.Chat.ID, "What's you pet? /dog /cat /other")
+    msg := tgbotapi.NewMessage(inputMessage.Chat.ID, fmt.Sprintf("What's you pet? \n/dog \n/cat \n/other"))
     bot.Send(msg)
 }
 
 func dogCommand(bot *tgbotapi.BotAPI, inputMessage *tgbotapi.Message) {
-    msg := tgbotapi.NewMessage(inputMessage.Chat.ID, "DOGI")
+    msg := tgbotapi.NewMessage(inputMessage.Chat.ID, fmt.Sprintf("DOGI"))
     bot.Send(msg)
 }
 
 func catCommand(bot *tgbotapi.BotAPI, inputMessage *tgbotapi.Message) {
-    msg := tgbotapi.NewMessage(inputMessage.Chat.ID, "CATI")
+    msg := tgbotapi.NewMessage(inputMessage.Chat.ID, fmt.Sprintf("CATI"))
     bot.Send(msg)
 }
 
 func otherCommand(bot *tgbotapi.BotAPI, inputMessage *tgbotapi.Message) {
-    msg := tgbotapi.NewMessage(inputMessage.Chat.ID, "NOT")
+    msg := tgbotapi.NewMessage(inputMessage.Chat.ID, fmt.Sprintf("NOT"))
     bot.Send(msg)
 }
 
 func deffaultBehavior(bot *tgbotapi.BotAPI, inputMessage *tgbotapi.Message) {
-    msg := tgbotapi.NewMessage(inputMessage.Chat.ID, "We don't know that command. Pls give mo actual information for our assistance.")
+    msg := tgbotapi.NewMessage(inputMessage.Chat.ID, fmt.Sprintf("We don't know that command. Pls give mo actual information for our assistance."))
     bot.Send(msg)
 }
 
