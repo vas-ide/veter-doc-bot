@@ -12,7 +12,7 @@ import (
 )
 
 
-func (c Commander) Pavel (inputMessage *tgbotapi.Message) {
+func (c Commander) Getqr (inputMessage *tgbotapi.Message) {
     config := qrterminal.Config{
 		Level:     qrterminal.M,
 		Writer:    os.Stdout,
@@ -32,5 +32,5 @@ func (c Commander) Pavel (inputMessage *tgbotapi.Message) {
 
 
 func init() {
-	registeredCommands["pavel"] = (*Commander).Pavel 
+	registeredCommands["getqr"] = (*Commander).Getqr 
 }
