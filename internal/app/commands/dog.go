@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
-	"github.com/google/uuid"
+	// "github.com/google/uuid"
 	"github.com/vas-ide/veter-doc-bot/internal/service/product"
 )
 
