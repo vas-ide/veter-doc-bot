@@ -2,6 +2,8 @@ package commands
 
 import (
 
+	"log"
+
 	"github.com/vas-ide/veter-doc-bot/internal/service/product"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
@@ -24,6 +26,15 @@ func NewCommander(bot *tgbotapi.BotAPI, productService *product.Service) *Comman
 
 
 func (c Commander) HandleUpdate(update tgbotapi.Update) {
+
+	defer func() {
+		if panicValue := recover(); panicValue != nil{
+			log.Printf("Recovered from panic: %v", panicValue)
+		}
+	}()
+
+
+
 	if update.Message == nil { // ignore any non-Message updates
 		return
 	}
