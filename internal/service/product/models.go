@@ -25,8 +25,8 @@ type Product struct {
 
 type Animal struct {
 
-	ID uuid.UUID
-	Owner Owner
+	// ID uuid.UUID
+	// Owner Owner
 	Name string
 	
 

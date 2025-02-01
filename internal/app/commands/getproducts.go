@@ -25,7 +25,9 @@ func (c Commander) GetProducts (inputMessage *tgbotapi.Message) {
 		return
 	}
 
+
 	msg := tgbotapi.NewMessage(inputMessage.Chat.ID, fmt.Sprintf("Successfully pars argument: %v", product.Title))
+
 	c.bot.Send(msg)
 }
 

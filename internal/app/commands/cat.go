@@ -10,7 +10,23 @@ import (
 
 func (c Commander) Cat (inputMessage *tgbotapi.Message) {
 	msg := tgbotapi.NewMessage(inputMessage.Chat.ID, fmt.Sprintf("CATI"))
+
+
+	msg.ReplyMarkup = tgbotapi.NewInlineKeyboardMarkup(
+		tgbotapi.NewInlineKeyboardRow(
+			tgbotapi.NewInlineKeyboardButtonData("Cat-M","Кот"),
+			tgbotapi.NewInlineKeyboardButtonData("Cat-W","Кошка"),
+		),
+		// tgbotapi.NewInlineKeyboardRow(
+		// 	tgbotapi.NewInlineKeyboardButtonData("Dog-M","Кабель"),
+		// 	tgbotapi.NewInlineKeyboardButtonData("Dog-w","Сука"),
+		// ),
+	)
+
 	c.bot.Send(msg)
+
+
+
 }
 
 

@@ -1,7 +1,8 @@
 package commands
 
 import (
-
+	"encoding/json"
+	"fmt"
 	"log"
 
 	"github.com/vas-ide/veter-doc-bot/internal/service/product"
@@ -32,6 +33,14 @@ func (c Commander) HandleUpdate(update tgbotapi.Update) {
 			log.Printf("Recovered from panic: %v", panicValue)
 		}
 	}()
+
+	if update.CallbackQuery != nil {
+		parsedData := product.Animal{}
+		json.Unmarshal([]byte(update.CallbackQuery.Data), &parsedData)
+		msg := tgbotapi.NewMessage(update.CallbackQuery.From.ID, fmt.Sprintf("Data update - %v", parsedData))
+		c.bot.Send(msg)
+		return 
+	}
 
 
 
