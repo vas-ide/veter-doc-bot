@@ -25,6 +25,7 @@ func (c Commander) Dog (inputMessage *tgbotapi.Message) {
 		// ),
 		tgbotapi.NewInlineKeyboardRow(
 			tgbotapi.NewInlineKeyboardButtonData("Dog-M","Кабель"),
+			// tgbotapi.NewInlineKeyboardButtonData("Dog-W","Сука"),
 			// tgbotapi.NewInlineKeyboardButtonData("Dog-W",fmt.Sprint("Сука %v", string(serializedData))),
 			tgbotapi.NewInlineKeyboardButtonData("Dog-W",string(serializedData))),
 	)
